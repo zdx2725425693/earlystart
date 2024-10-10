@@ -71,7 +71,7 @@ bool IsWinlogonRunning() {
 
     if (Process32FirstW(hSnapshot, &processEntry)) {
         do {
-            if (_wcsicmp(processEntry.szExeFile, L"winlogon.exe") == 0) {
+            if (_wcsicmp(processEntry.szExeFile, L"Userinit.exe") == 0) {
                 CloseHandle(hSnapshot);
                 return true; // 找到了 winlogon.exe 进程
             }
