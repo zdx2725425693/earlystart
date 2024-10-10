@@ -4,19 +4,33 @@
 #include <tchar.h>
 #include <iostream>
 #include "../log/log.h"
+#include <iostream>
+#include <cstdlib> // for system()
+
+
+
+
+#define DIR_PATH "C:/EarlyStart" // 要删除的目录路径
 #define szServiceName _T("EarlyStartService")//宏定义服务名称
 
 using namespace std;
 BOOL IsInstalled();//判断服务是否安装的函数
 BOOL Uninstall();//服务卸载函数
 void WINAPI ServiceStrl(DWORD dwOpcode);//服务控制函数
-void StopService(const TCHAR* serviceName);
+void StopService(const TCHAR* serviceName);//服务停止函数
+bool DeleteDirectory();//删除配置文件
 int main()
 {
     StopService(szServiceName);
     if(Uninstall())
     {
+
     cout<<"uninstall successfully!"<<endl;
+        if(DeleteDirectory())
+        {
+            cout<<"DeleteDirectory successfully!"<<endl;
+
+        }
     }
     else
     {
@@ -134,3 +148,23 @@ void StopService(const TCHAR* serviceName) {
     CloseServiceHandle(hService);
     CloseServiceHandle(hSCM);
 }
+
+bool DeleteDirectory()
+{
+    // 构建命令，/s 表示递归删除目录及其内容，/q 表示安静模式（不提示确认）
+    string command = "powershell -Command \"Remove-Item -Path '" + string(DIR_PATH) + "' -Recurse -Force -Confirm:$false\"";
+
+
+    // 调用系统命令执行删除
+    int result = system(command.c_str());
+
+    if (result == 0) {
+        cout << "Directory deleted successfully." << endl;
+        return true;
+    } else {
+        cerr << "Error deleting directory." << endl;
+        return false;
+    }
+}
+
+

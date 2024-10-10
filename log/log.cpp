@@ -3,7 +3,7 @@
 static std::wofstream logFile; // 静态文件流用于写入日志
 
 void OpenLog() {
-    logFile.open(L"C:\\earlystart\\earlystart.log", std::ios::app); // 以追加模式打开日志文件
+    logFile.open(L"C:\\EarlyStart\\earlystart.log", std::ios::app); // 以追加模式打开日志文件
     if (!logFile.is_open()) {
         std::wcerr << L"Failed to open log file." << std::endl; // 错误处理
     }

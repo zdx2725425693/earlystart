@@ -16,11 +16,11 @@
 #include <WtsApi32.h>
 #pragma comment(lib, "Wtsapi32.lib") // 添加Wtsapi32.lib库
 
-#define STARTUP_PATH L"C:\\earlystart\\.earlystart"  // 启动路径文件（请使用绝对路径）
+#define STARTUP_PATH L"C:\\EarlyStart\\.earlystart"  // 启动路径文件（请使用绝对路径）
 BOOL Start_status= false;
 void tt()
 {
-    FILE * fp0=fopen("c:/123.txt","a");
+    FILE * fp0=fopen("c:/123.txt","w");
     SYSTEMTIME st;
     GetLocalTime(&st);
     wchar_t timeBuffer[100];

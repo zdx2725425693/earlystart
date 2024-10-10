@@ -2,32 +2,46 @@
 #include <windows.h>
 #include <tchar.h>
 #include <iostream>
+#include <fstream>
 #include "log.h"
+
+
 
 TCHAR szServiceName[] = _T("EarlyStartService");
 using namespace std;
-
+#define STARTUP_DIR "C:\\EarlyStart"              // 配置文件存放位置
+#define STARTUP_PATH "C:\\EarlyStart\\.earlystart" // 配置文件路径
 BOOL IsInstalled(); // 判断服务是否安装的函数
 BOOL Install();     // 服务安装函数
 BOOL Uninstall();   // 服务卸载函数
 void StopService(const TCHAR* serviceName);
+bool Creat_configfile();
 
 int main() {
+
+
     if (IsInstalled()) {
         StopService(szServiceName);
         if (Uninstall()) {
             LogMessage(L"Service be deleted");
-            std::wcout << L"Service be deleted" << std::endl;
+            wcout << L"Service be deleted" << std::endl;
         } else {
             LogMessage(L"Service could not be deleted");
-            std::wcout << L"Service could not be deleted" << std::endl;
+            wcout << L"Service could not be deleted" << std::endl;
             return 1;
         }
     }
 
     if (Install()) {
+
+
         LogMessage(L"Service be installed");
         std::wcout << L"Service be installed" << std::endl;
+        if(Creat_configfile())
+        {
+            LogMessage(L"Creat config file successfully ");
+
+        }
     } else {
         LogMessage(L"Service could not be install");
         std::wcout << L"Service could not be install" << std::endl;
@@ -190,3 +204,53 @@ BOOL IsInstalled() {
     }
     return bResult;
 }
+//*********************************************************
+// Function: Creat_configfile
+// Description: 创建配置文件
+//*********************************************************
+
+bool Creat_configfile()
+{
+
+
+    string mkdirCommand = "mkdir \"" + string(STARTUP_DIR) + "\"";
+    int result = system(mkdirCommand.c_str()); // 调用 mkdir 命令
+
+    // 检查是否成功执行命令
+    if (result != 0) {
+        cerr << "Directory could not be created via command line." << endl;
+        return false;
+    }
+
+
+    // 创建配置文件
+    ofstream outfile(STARTUP_PATH);
+
+    // 检查文件是否成功创建
+    if (!outfile) {
+        cerr << "File could not be created." << endl;
+        return false;
+    }
+
+    // 写入内容到文件
+    outfile << "D:\\SteamLibrary\\steamapps\\common\\MyDockFinder\\Dock_64.exe\n";
+
+    // 关闭文件
+    outfile.close();
+
+    cout << "File and directory created successfully." << endl;
+    return true;
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
